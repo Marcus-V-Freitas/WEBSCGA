@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WebSCGADominio.Entidades
 {
-   public class Usuario
+   public class Usuario:Entidade
     {
         public int Id { get; set; }
 
@@ -19,9 +19,14 @@ namespace WebSCGADominio.Entidades
         /// <summary>
         /// Usuário pode ter um ou mais pedidos relacionados
         /// </summary>
-        public ICollection<Pedido> Pedidos { get; set; }
+        public virtual ICollection<Pedido> Pedidos { get; set; }
 
-
-
+        public override void Validate()
+        {
+            if (string.IsNullOrEmpty(Email))
+                AdicionarErro("Email não foi informado");
+            if (string.IsNullOrEmpty(Senha))
+                AdicionarErro("Senha não foi informado");
+        }
     }
 }

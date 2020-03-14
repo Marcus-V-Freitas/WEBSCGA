@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WebSCGADominio.Entidades
 {
-    public class Produto
+    public class Produto:Entidade
     {
         public int Id { get; set; }
 
@@ -13,5 +13,10 @@ namespace WebSCGADominio.Entidades
         public string Descricao { get; set; }
 
         public double Preco { get; set; }
+
+        public override void Validate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
