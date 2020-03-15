@@ -14,9 +14,16 @@ namespace WebSCGADominio.Entidades
 
         public double Preco { get; set; }
 
+        public string NomeArquivo { get; set; }
+
         public override void Validate()
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(Nome))
+                AdicionarErro("Nome do produto não foi informado");
+
+            if (string.IsNullOrEmpty(Descricao))
+                AdicionarErro("Descrição não foi informado");
+
         }
     }
 }

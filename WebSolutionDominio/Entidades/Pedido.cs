@@ -38,12 +38,11 @@ namespace WebSCGADominio.Entidades
 
         public override void Validate()
         {
-            if (!itensPedido.Any())
-            
+            if (!itensPedido.Any())        
                 AdicionarErro("Erro - Item de pedido não pode ficar vazio");
             if (string.IsNullOrEmpty(CEP))
                 AdicionarErro("Erro - CEP deve estar preenchido");
-            if (FormaPagamentoId ==10)
+            if (FormaPagamentoId ==0)
                 AdicionarErro("Erro - Não foi informada a forma de pagamento");
         }
     }

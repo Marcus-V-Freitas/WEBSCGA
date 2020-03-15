@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebSCGADominio.Contratos;
 using WebSCGARepositorio.Context;
+using WebSCGARepositorio.Repositories;
 
 namespace WEBSCGA
 {
@@ -35,6 +38,17 @@ namespace WEBSCGA
                                                    op.UseLazyLoadingProxies()
                                                    .UseSqlServer(connectionString,
                                                    m => m.MigrationsAssembly(nameof(WebSCGARepositorio)))) ;
+
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // In production, the Angular files will be served from this directory
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IPedidoRepository, PedidoRepository>();
+
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -58,18 +72,13 @@ namespace WEBSCGA
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            if (!env.IsDevelopment())
-            {
-                app.UseSpaStaticFiles();
-            }
+            app.UseSpaStaticFiles();
 
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(routes =>
             {
-                endpoints.MapControllerRoute(
+                routes.MapRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    template: "{controller}/{action=Index}/{id?}");
             });
 
             app.UseSpa(spa =>
@@ -81,7 +90,7 @@ namespace WEBSCGA
 
                 if (env.IsDevelopment())
                 {
-                    //spa.UseAngularCliServer(npmScript: "start");
+                    // spa.UseAngularCliServer(npmScript: "start");                    
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200/");
                 }
             });

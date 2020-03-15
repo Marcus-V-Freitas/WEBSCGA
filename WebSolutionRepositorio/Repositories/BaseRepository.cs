@@ -1,47 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using WebSCGADominio.Contratos;
+using WebSCGARepositorio.Context;
 
 namespace WebSCGARepositorio.Repositories
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        public BaseRepository()
+
+        protected readonly WebSCGAContext _webSCGA;
+
+        public BaseRepository(WebSCGAContext webSCGA)
         {
-
+            _webSCGA = webSCGA; 
         }
-
-
 
         public void Adicionar(TEntity entity)
         {
-            throw new NotImplementedException();
+            _webSCGA.Set<TEntity>().Add(entity);
+            _webSCGA.SaveChanges();
         }
 
         public void Atualizar(TEntity entity)
         {
-            throw new NotImplementedException();
+            _webSCGA.Set<TEntity>().Update(entity);
+            _webSCGA.SaveChanges();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _webSCGA.Dispose();
         }
 
         public IEnumerable<TEntity> Entities()
         {
-            throw new NotImplementedException();
+            return _webSCGA.Set<TEntity>().ToList();
         }
 
         public TEntity GetEntityId(int id)
         {
-            throw new NotImplementedException();
+            return _webSCGA.Set<TEntity>().Find(id);
         }
 
         public void Remover(TEntity entity)
         {
-            throw new NotImplementedException();
+            _webSCGA.Set<TEntity>().Remove(entity);
+            _webSCGA.SaveChanges();
         }
     }
 }
